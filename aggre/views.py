@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 import json
 from pprint import pprint
 from eventregistry import *
@@ -86,6 +86,6 @@ def index(request):
         'date6' : '18th September 2011',
         'body6' : entry_list[5].summary,
     }
-    	return render_to_response('index.html', content)
+    	return render(request, 'index.html', content)
 
 	
