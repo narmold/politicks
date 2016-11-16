@@ -28,6 +28,7 @@ def index(request):
 
 	#Get Events
 	er = EventRegistry()
+	er.login("narmold@gmail.com","apple1208")
 	q = QueryEvents(lang = "eng")
 	q.addConcept(er.getConceptUri("Politics", lang = "eng"))   
 	q.addLocation(er.getLocationUri("United States"))
@@ -39,25 +40,29 @@ def index(request):
 	res = er.execQuery(q)
 
 	#   Print all of the info the the execQuery
-	#pprint(res)
+	pprint(res)
 
 	#Get the amount of events
 	event_count = res["events"]["count"] - 1
+
+	#posts.objects.all().delete()
 
 	#Loop through events
 	for x in xrange(0, event_count):
 		
 		post_title = res["events"]["results"][x]["title"]["eng"]
 		post_summary = res["events"]["results"][x]["summary"]["eng"]
+		post_uri = res["events"]["results"][x]["uri"]
 		
 		#       Dump the title and summary for each event
 		#print(json.dumps(res["events"]["results"][x]["title"]["eng"]))
 		#print(json.dumps(res["events"]["results"][x]["summary"]["eng"]))
 
-		post = posts(title = post_title, summary = post_summary)
+		post = posts(title = post_title, summary = post_summary)#, uri = post_uri)
 		post.save()
 
 	entry_list = list(posts.objects.all())
+
 
 	#Content to send to index.html (definitely a better way to do this)
 	content = {
@@ -73,18 +78,18 @@ def index(request):
         'author3' : 'Giles',
         'date3' : '18th September 2011',
         'body3' : entry_list[2].summary,
-        'title4' : entry_list[3].title,
-        'author4' : 'Giles',
-        'date4' : '18th September 2011',
-        'body4' : entry_list[3].summary,
-        'title5' : entry_list[4].title,
-        'author5' : 'Giles',
-        'date5' : '18th September 2011',
-        'body5' : entry_list[4].summary,
-        'title6' : entry_list[5].title,
-        'author6' : 'Giles',
-        'date6' : '18th September 2011',
-        'body6' : entry_list[5].summary,
+        # 'title4' : entry_list[3].title,
+        # 'author4' : 'Giles',
+        # 'date4' : '18th September 2011',
+        # 'body4' : entry_list[3].summary,
+        # 'title5' : entry_list[4].title,
+        # 'author5' : 'Giles',
+        # 'date5' : '18th September 2011',
+        # 'body5' : entry_list[4].summary,
+        # 'title6' : entry_list[5].title,
+        # 'author6' : 'Giles',
+        # 'date6' : '18th September 2011',
+        # 'body6' : entry_list[5].summary,
     }
     	return render(request, 'index.html', content)
 
